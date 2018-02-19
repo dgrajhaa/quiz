@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<!-- Custom Types -->
+    <typedef name="password" class="com.wethink.account.iam.Password">
+      <param name="KEY">12WeP@$$w0rd</param>
+      <param name="VECTOR">d328f2a891c54f1b8ae6b12a6bb91a0d</param>
+    </typedef>
+
+    <!-- Tables -->
+	<!-- Organization -->
+    <class name="com.wethink.account.iam.Organization" table="Organization">
+        <id name="organization_id" type="java.lang.Long">
+            <column name="organization_id" />
+            <generator class="identity" />
+        </id>
+        <property name="organization_name" type="string">
+            <column name="organization_name" length="512" />
+        </property>
+        <property name="organization_domain" type="string">
+            <column name="organization_domain" length="512" />
+        </property>
+        <property name="organization_website" type="string">
+            <column name="organization_website" length="512" />
+        </property>		
+        <property name="organization_email" type="string">
+            <column name="organization_email" length="512" />
+        </property>
+        <property name="organization_type" type="string">
+            <column name="organization_type" length="512" />
+        </property>
+    </class>
+	<!-- User -->
+    <class name="com.wethink.account.iam.User" table="User">
+        <id name="user_id" type="java.lang.Long">
+            <column name="user_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="organization" class="com.wethink.account.iam.Organization">
+        	<column name="organization_id" not-null="true"/>
+        </many-to-one>
+        <property name="user_first_name" type="string">
+            <column name="user_first_name" length="512" />
+        </property>
+        <property name="user_middle_name" type="string">
+            <column name="user_middle_name" length="512" />
+        </property>
+        <property name="user_last_name" type="string">
+            <column name="user_last_name" length="512" />
+        </property>
+        <property name="user_display_name" type="string">
+            <column name="user_display_name" length="512" />
+        </property>
+        <property name="user_dob" type="date">
+            <column name="user_dob" length="512" />
+        </property>
+        <property name="user_photo" type="blob">
+            <column name="user_photo"/>
+        </property>		
+        <property name="user_email" type="string">
+            <column name="user_email" length="512" />
+        </property>
+        <property name="user_mobile" type="string">
+            <column name="user_mobile" length="50" />
+        </property>
+    </class>
+    <!-- Role -->
+    <class name="com.wethink.account.iam.Role" table="Role">
+        <id name="role_id" type="java.lang.Long">
+            <column name="role_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="organization" class="com.com.wethink.account.iam.Organization">
+        	<column name="organization_id" not-null="true"/>
+        </many-to-one>
+        <property name="role_name" type="string">
+            <column name="role_name" length="512" />
+        </property>
+        <property name="role_type" type="string">
+            <column name="role_type" length="512" />
+        </property>
+    </class>
+    <!-- UserRoles -->
+	<class name="com.wethink.account.iam.UserRoles" table="UserRoles">
+        <id name="unique_id" type="java.lang.Long">
+            <column name="unique_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="user" class="com.wethink.account.iam.User">
+        	<column name="user_id" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="role" class="com.wethink.account.iam.Role">
+        	<column name="role_id" not-null="true"/>
+        </many-to-one>
+    </class>
+    <!-- UserAccount -->
+    <class name="com.wethink.account.iam.UserAccount" table="UserAccount">
+        <id name="account_id" type="java.lang.Long">
+            <column name="account_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="user" class="com.wethink.account.iam.User">
+        	<column name="user_id" not-null="true"/>
+        </many-to-one>
+        <property name="account_name" type="string">
+            <column name="account_name" length="512" />
+        </property>
+        <property name="account_password" type="password">
+            <column name="account_password" length="512" />
+        </property>
+        <property name="account_type" type="string">
+            <column name="account_type" length="512" />
+        </property>
+    </class>
+</hibernate-mapping>
